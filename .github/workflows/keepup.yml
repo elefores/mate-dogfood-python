@@ -1,0 +1,31 @@
+name: Keep Up
+
+# Runs MATE (Keep Up) to scan for outdated dependencies and open upgrade PRs.
+# Required repository secrets:
+#   KUP_LICENSE_KEY          - signed keepup license key (the tool refuses to run without it)
+#   CLAUDE_CODE_OAUTH_TOKEN  - token for the Claude Code agent (see kup.toml [agent])
+#   ACCESS_TOKEN             - GitHub token used to push branches and open PRs
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  keepup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Keep Up
+        env:
+          KUP_LICENSE_KEY: ${{ secrets.KUP_LICENSE_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          docker run --rm \
+            -e KUP_LICENSE_KEY \
+            -e CLAUDE_CODE_OAUTH_TOKEN \
+            -v "${{ github.workspace }}:/repo" \
+            erwanlfrt/mate-keep-up-dev:latest \
+            kup --path /repo --access-token "$ACCESS_TOKEN"

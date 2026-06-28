@@ -1,0 +1,22 @@
+# keepup (MATE / Keep Up) configuration.
+#
+# Sections below exercise the main config surface: include / ignore filters
+# (languages, paths, dependencies), grouping thresholds, and the AI agent.
+
+[include]
+# Only look at this project's Python sources.
+languages = ["python"]
+paths = ["src/**"]
+
+[ignore]
+# The test pins move on their own cadence — leave them out of automated PRs.
+paths = ["tests/**"]
+dependencies = ["pytest"]
+
+[thresholds]
+# Open one PR per dependency file; group a folder's worth once it crosses 3.
+file = 1
+folder = 3
+
+[agent]
+name = "claude-code"

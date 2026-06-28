@@ -1,0 +1,17 @@
+# Web framework — a few minor versions behind the current 3.x line.
+flask==2.2.5
+
+# HTTP client — behind the current 2.3x line.
+requests==2.28.2
+
+# Data validation — pinned on the v1 line ON PURPOSE.
+#
+# Upgrading to Pydantic 2.x is a KNOWN BREAKING CHANGE: `@validator` became
+# `@field_validator`, the inner `class Config` became `model_config`, and
+# `.dict()`/`.json()` became `.model_dump()`/`.model_dump_json()`. The code in
+# `src/models.py` uses the v1 APIs, so a real upgrade has to touch code — this
+# is the scenario that exercises keepup's AI-upgrade path, not just a pin bump.
+pydantic==1.10.13
+
+# Test runner — behind the current 8.x line.
+pytest==7.2.2
